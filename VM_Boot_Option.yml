@@ -1,0 +1,14 @@
+---
+- name: boot from BIOS
+  hosts: localhost
+  tasks:
+    - name: boot from BIOS
+      vmware_boot_manager:
+        hostname: 192.168.100.202
+        username: root
+        password: T!g3r@Ind!A
+        validate_certs: no
+        datacenter: HSILAB
+        folder: Ansible
+        name: PxETest1
+

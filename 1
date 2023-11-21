@@ -1,0 +1,99 @@
+---
+- name: create a virtual machine on given ESXi hostname
+  hosts: localhost
+  tasks:
+    - name: create a new machine
+      vmware_guest:
+        hostname: CDG-VCENTER.hsilab.com
+        username: administrator@vsphere.local
+        password: T!g3r@Ind!A
+        validate_certs: no
+        datacenter: HSILAB
+        folder: Ansible
+        name: PxETest5
+        guest_id: rhel8_64Guest
+        datastore: CDG_Datastore4
+        esxi_hostname: 192.168.100.202
+        networks:
+        - name: VM Network
+          device_type: vmxnet3
+          start_connected: yes
+        wait_for_ip_address: true
+        cdrom:
+           type: iso
+           iso_path: "[CDG_Datastore1] SOFTWARES IMAGES/rhel-8.6-x86_64-dvd.iso"
+        disk:
+          - size_gb: 100
+            type: thin
+        hardware:
+          memory_mb: 8192
+          num_cpus: 6
+      ignore_errors: yes 
+
+    
+    - name: boot from BIOS
+      vmware_guest_boot_manager:
+        hostname: 192.168.100.202
+        username: root
+        password: T!g3r@Ind!A
+        validate_certs: no
+        name: PxETest5
+        boot_delay: 2000
+        enter_bios_setup: True
+        boot_retry_enabled: True
+        boot_retry_delay: 22300
+        boot_firmware: bios
+        boot_order:
+          - ethernet
+          - disk
+          - floppy
+          - cdrom
+
+
+    - name: Power on / Power off / Restart a virtual machine
+      vmware_guest_powerstate:
+        hostname: 192.168.100.202
+        username: root
+        password: T!g3r@Ind!A
+        folder: Ansible
+        name: PxETest5
+        state: powered-on
+
+
+    - name: Power on / Power off / Restart a virtual machine
+      vmware_guest_powerstate:
+        hostname: 192.168.100.202
+        username: root
+        password: T!g3r@Ind!A
+        folder: Ansible
+        name: PxETest5
+        state: powered-off
+    
+    - name: boot from BIOS
+      vmware_guest_boot_manager:
+        hostname: 192.168.100.202
+        username: root
+        password: T!g3r@Ind!A
+        validate_certs: no
+        name: PxETest5
+        boot_delay: 2000
+        enter_bios_setup: True
+        boot_retry_enabled: True
+        boot_retry_delay: 22300
+        boot_firmware: bios
+        boot_order:
+          - disk
+          - ethernet
+          - floppy
+          - cdrom
+
+    - name: Power on / Power off / Restart a virtual machine
+      vmware_guest_powerstate:
+        hostname: 192.168.100.202
+        username: root
+        password: T!g3r@Ind!A
+        folder: Ansible
+        name: PxETest5
+        state: powered-on
+
+
